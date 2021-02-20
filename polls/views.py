@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 
-from .models import Choice, Question
+from .models import Choice, Question, Thought
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
@@ -48,6 +48,17 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+'''
+def thoughtseditor(request):
+    return HttpResponse('<h1>Does this work<h1>')
+    # return render(request, 'polls/thoughts.html')   # not done yet
+'''
+
+
+class ThoughtsView(generic.ListView):
+    model = Thought  # Each generic view needs to know what model it will be acting upon
+    template_name = 'polls/thoughts.html'  # reference the html file
 
 
 '''

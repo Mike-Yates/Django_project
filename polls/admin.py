@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 
-from .models import Choice, Question
+from .models import Choice, Question, Thought
 
 class ChoiceInline(admin.StackedInline):
     model = Choice
@@ -19,3 +19,12 @@ class QuestionAdmin(admin.ModelAdmin):
     search_fields = ['question_text']
 admin.site.register(Question, QuestionAdmin)
 # Register your models here.
+
+
+'''
+class ThoughtAdmin(admin.ModelAdmin): 
+    model = Thought
+'''
+
+admin.site.register(Thought)   #adds thought to admin site under Question
+
