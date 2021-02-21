@@ -60,8 +60,8 @@ class ThoughtsView(generic.ListView):
     context_object_name = 'latest_thought_list'
 
     def get_queryset(self):
-        """Return the last five published Thoughts."""
-        return Thought.objects.filter(date_posted__lte=timezone.now()).order_by('-date_posted')[:5]
+        """Return the published Thoughts in order of produced. only include last 10"""
+        return Thought.objects.filter(date_posted__lte=timezone.now()).order_by('-date_posted')[:10]
 
         # return Question.objects.order_by('-pub_date')[:5]
     # return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
@@ -69,16 +69,25 @@ class ThoughtsView(generic.ListView):
 
 def thoughtsSubmit(request):
     form = ThoughtsForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        form = ThoughtsForm()  # rerender the form, deleting the text from it.
-    context = {
+
+    if (request.method == 'POST'):# if its a post request, post request = someone clicking submit; receiving data
+        if form.is_valid():
+            form.save() #saves to database
+            form = ThoughtsForm()  # rerender the form, deleting the text from it.
+            context = {
+            'form': form
+            }
+            return HttpResponseRedirect('/polls/thoughts/list')  #when you go to results page, displays result
+
+    else:
+        form = ThoughtsForm()
+        context = {
         'form': form
-    }
+        }
+        return render(request, "polls/thoughtsSubmission.html", context)
+    # render loads template, redners, pass it to httpresponse
 
-    return render(request, "polls/thoughtsSubmission.html", context)
 
-    # return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 
 '''
