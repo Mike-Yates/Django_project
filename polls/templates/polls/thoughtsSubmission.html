@@ -7,12 +7,14 @@
 <form method='POST'> {% csrf_token %}
 {{ form.as_p }}
 <input type='submit' value='Save' />
+    <small id="emailHelp" class="form-text text-muted">Let loose! Your identity as the author will remain anonymous.</small>
 </form>
 
 <li><a href="/polls/thoughts/list/">{{ "See All Thoughts" }}</a></li>
 
 
 <!-- the href tag might not work when i deploy it to a nonlocal server.  -->
+
 
 
 
