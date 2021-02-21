@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1> Working on the thoughts page... </h1>
-</body>
-</html>
+
+<h1> Thoughts Page </h1>
+
+{% if latest_thought_list %}
+    <ul>
+    {% for thought in latest_thought_list %}
+
+        <li>{{ thought.thought_text }} </li>
+        <!-- the href tag makes the question.question_text an html link to polls:detail question.id -->
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No thoughts are available.</p>
+{% endif %}

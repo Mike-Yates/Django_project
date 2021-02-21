@@ -1,0 +1,14 @@
+
+<h1>{{ "Submit a Thought!" }}</h1>
+
+
+{% block content %}
+<form method='POST'> {% csrf_token %}
+{{ form.as_p }}
+<input type='submit' value='Save' />
+</form>
+
+<li><a href="http://localhost:8000/polls/thoughts/list/">{{ "See All Thoughts" }}</a></li>
+<!-- the href tag might not work when i deploy it to a nonlocal server.  -->
+
+{% endblock %}

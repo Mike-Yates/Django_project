@@ -3,8 +3,9 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
-
 from .models import Choice, Question, Thought
+
+from .forms import ThoughtsForm
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
@@ -17,6 +18,7 @@ class IndexView(generic.ListView):
         """
         return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
 
+
 class DetailView(generic.DetailView):
     model = Question
     template_name = 'polls/detail.html'
@@ -27,9 +29,11 @@ class DetailView(generic.DetailView):
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
 
+
 class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
+
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
@@ -49,16 +53,32 @@ def vote(request, question_id):
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
-'''
-def thoughtseditor(request):
-    return HttpResponse('<h1>Does this work<h1>')
-    # return render(request, 'polls/thoughts.html')   # not done yet
-'''
-
 
 class ThoughtsView(generic.ListView):
-    model = Thought  # Each generic view needs to know what model it will be acting upon
+    # model = Thought  # Each generic Detail view needs to know what model it will be acting upon
     template_name = 'polls/thoughts.html'  # reference the html file
+    context_object_name = 'latest_thought_list'
+
+    def get_queryset(self):
+        """Return the last five published Thoughts."""
+        return Thought.objects.filter(date_posted__lte=timezone.now()).order_by('-date_posted')[:5]
+
+        # return Question.objects.order_by('-pub_date')[:5]
+    # return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
+
+
+def thoughtsSubmit(request):
+    form = ThoughtsForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        form = ThoughtsForm()  # rerender the form, deleting the text from it.
+    context = {
+        'form': form
+    }
+
+    return render(request, "polls/thoughtsSubmission.html", context)
+
+    # return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 
 '''

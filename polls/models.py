@@ -30,8 +30,16 @@ class Choice(models.Model):
 
 
 class Thought(models.Model):
-    thought_text = models.CharField(max_length=200)
+    # thought_text = models.CharField(max_length=200)
+    thought_text = models.TextField()
+    date_posted = models.DateTimeField('date published')
+    # date_posted = models.DateTimeField(auto_now_add=True)  # auto_now_add makes the field uneditable (bad!)
 
     def __str__(self):
         return self.thought_text
 
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.date_posted = timezone.now()
+        return super(Thought, self).save(*args, **kwargs)

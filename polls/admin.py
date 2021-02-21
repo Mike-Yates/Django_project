@@ -26,5 +26,5 @@ class ThoughtAdmin(admin.ModelAdmin):
     model = Thought
 '''
 
-admin.site.register(Thought)   #adds thought to admin site under Question
+admin.site.register(Thought)   # adds thought to admin site
 
